@@ -46,7 +46,7 @@
                      :component component
                      :co-dependencies co-dependencies})))))
 
-(defn- assoc-co-dependencies
+(defn ^{:bigbang/phase :before-start} assoc-co-dependencies
   "Co-dependency value is a CoDep instance that contains a
    reference to atom system and a co-dependency component key."
   [c ^Atom system]
@@ -54,7 +54,7 @@
             (assoc c (keyword (str "*" (name k-i))) (CoDep. system k-e)))
           c (co-dependencies c)))
 
-(defn- assoc-co-deps-and-start
+(defn ^{:bigbang/phase :on-start} assoc-co-deps-and-start
   "This fn starts the component after associating codependencies and
    updates system atom with the started component"
   [c ^Atom system]
