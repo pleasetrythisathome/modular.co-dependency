@@ -64,6 +64,15 @@
     (swap! system assoc (get-component-key c @system) started-component)
     started-component))
 
+(defn ^{:bigbang/phase :after-start} update-atom-system
+  "Updates the component in the system atom. required after any actions which updates components for updated values to be available to co-dependencies."
+  [c* ^Atom system]
+  (let [key-component (:bigbang/key (meta c*))]
+    (if (nil? key-component)
+      (println (format "this component \"%s\" didn't return this so we can't access to its key. It will not available for co-dependency either" c*))
+      (swap! system assoc key-component c*))
+   c*))
+
 (defn system-co-using
   "Associates dependency metadata with multiple components in the
   system. dependency-map is a map of keys in the system to maps or
